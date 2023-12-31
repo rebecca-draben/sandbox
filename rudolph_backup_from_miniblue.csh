@@ -50,26 +50,26 @@ zdump EST
 echo "*********************************************************"
 
 for i_dir in "${backup_dirs[@]}"; do
-   source_dir="/Applications/nobackup/miniblue/$i_dir"
-   dest_dir="/Volumes/RUDOLPH/backup_miniblue/$i_dir"
+    source_dir="/Applications/nobackup/miniblue/$i_dir"
+    dest_dir="/Volumes/RUDOLPH/backup_miniblue/$i_dir"
 
-   # strip off the last dir in the $dest_dir
-   dest_dir_up1dir="$(echo "$dest_dir" | sed 's|\/[^\/]*$||')"
+    # strip off the last dir in the $dest_dir
+    dest_dir_up1dir="$(echo "$dest_dir" | sed 's|\/[^\/]*$||')"
 
-   echo "---------------------------------------------------------"
-   echo "[$i_dir]"
-   echo "---------------------------------------------------------"
-  
-   # -rltDv is equivalent to --archive --verbose 
-   # except it doesn't include --owner --group --partial 
-   # which I don't care about anyway
-   # switched to -rltDv because it works with exfat file systems (like my 64G SD card)
-   # added --modify-window=1 because timestamps can be slightly different between mac and FAT32 and 3600 because can be 1 hour different due to DST 
-   rsync $rsync_args \
-       -rltDv \
-       --modify-window=3601 \
-       --exclude=".DS_Store" \
-       "$source_dir" "$dest_dir_up1dir"
+    echo "---------------------------------------------------------"
+    echo "[$i_dir]"
+    echo "---------------------------------------------------------"
+
+    # -rltDv is equivalent to --archive --verbose
+    # except it doesn't include --owner --group --partial
+    # which I don't care about anyway
+    # switched to -rltDv because it works with exfat file systems (like my 64G SD card)
+    # added --modify-window=1 because timestamps can be slightly different between mac and FAT32 and 3600 because can be 1 hour different due to DST
+    rsync $rsync_args \
+        -rltDv \
+        --modify-window=3601 \
+        --exclude=".DS_Store" \
+        "$source_dir" "$dest_dir_up1dir"
 
     # update timestamps
     # for some reason the rsync -t option stopped working when rsyncing to USB drive, so this is workaround
@@ -77,21 +77,21 @@ for i_dir in "${backup_dirs[@]}"; do
         echo "Update timestamps of files and directories - begin"
 
         # find source dir files and directories recursively and iterate through them
-       # the -r option is used so that backslashes are not treated as escape characters
-       find "$source_dir" -type f -or -type d | while read -r source_item; do
+        # the -r option is used so that backslashes are not treated as escape characters
+        find "$source_dir" -type f -or -type d | while read -r source_item; do
 
-         # get path of dest item by replacing the source dir with the dest dir
-         dest_item="$(echo "$source_item" | sed "s|$source_dir|$dest_dir|")"
+            # get path of dest item by replacing the source dir with the dest dir
+            dest_item="$(echo "$source_item" | sed "s|$source_dir|$dest_dir|")"
 
-         # update timestamp of destination file to match source file
-         touch -c -r "$source_item" "$dest_item"
+            # update timestamp of destination file to match source file
+            touch -c -r "$source_item" "$dest_item"
 
-       done
-       
-       echo "Update timestamps of files and directories - end"
-   else
+        done
+
+        echo "Update timestamps of files and directories - end"
+    else
         echo "Update timestamps of files and directories - skip"
-   fi
+    fi
 done
 
 echo "*********************************************************"
