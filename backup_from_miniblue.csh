@@ -51,7 +51,17 @@ echo "*********************************************************"
 
 for i_dir in "${backup_dirs[@]}"; do
     source_dir="/Applications/nobackup/miniblue/$i_dir"
-    dest_dir="/Volumes/RUDOLPH/backup_miniblue/$i_dir"
+    dest_dir_rudolph="/Volumes/RUDOLPH/backup_miniblue/$i_dir"
+    dest_dir_whistle="/Volumes/WHISTLE/backup_miniblue/$i_dir"
+
+    if [ -d "$dest_dir_rudolph" ]; then
+        dest_dir="$dest_dir_rudolph"
+    elif [ -d "$dest_dir_whistle" ]; then
+        dest_dir="$dest_dir_whistle"
+    else
+        echo "Destination not found"
+        exit 1
+    fi
 
     # strip off the last dir in the $dest_dir
     dest_dir_up1dir="$(echo "$dest_dir" | sed 's|\/[^\/]*$||')"
