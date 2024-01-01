@@ -53,11 +53,17 @@ for i_dir in "${backup_dirs[@]}"; do
     source_dir="/Applications/nobackup/miniblue/$i_dir"
     dest_dir_rudolph="/Volumes/RUDOLPH/backup_miniblue/$i_dir"
     dest_dir_whistle="/Volumes/WHISTLE/backup_miniblue/$i_dir"
+    dest_dir_even="/Volumes/MYFILESEVEN/BackupEvenYears/2022/$i_dir"
+    dest_dir_odd="/Volumes/MYFILESODD/BackupOddYears/2023/$i_dir"
 
     if [ -d "$dest_dir_rudolph" ]; then
         dest_dir="$dest_dir_rudolph"
     elif [ -d "$dest_dir_whistle" ]; then
         dest_dir="$dest_dir_whistle"
+    elif [ -d "$dest_dir_even" ]; then
+        dest_dir="$dest_dir_even"
+    elif [ -d "$dest_dir_odd" ]; then
+        dest_dir="$dest_dir_odd"
     else
         echo "Destination not found"
         exit 1
