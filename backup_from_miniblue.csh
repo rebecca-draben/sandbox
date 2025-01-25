@@ -85,6 +85,7 @@ for i_dir in "${backup_dirs[@]}"; do
         -rltDv \
         --modify-window=3601 \
         --exclude=".DS_Store" \
+        --exclude="._*" \
         "$source_dir" "$dest_dir_up1dir"
 
     # update timestamps
